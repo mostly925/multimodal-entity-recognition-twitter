@@ -81,10 +81,13 @@ pip install -r requirements.txt
 ```
 
 - `tokens`：分词后的单词列表
-- `label`：对应的 BIO 标签（`B-PER/I-PER/B-ORG/I-ORG/B-LOC/I-LOC/B-MISC/I-MISC/O`）
+- `label`：BIO 标注法:
+  - **"O"**：非实体/标点
+  - **"B-PER" / "I-PER"**： Person (人名)
+  - **"B-ORG" /  "I-ORG"**：Organization (组织/机构/公司)
+  - **"B-LOC" / "I-LOC"**：Location (地点/地名)
+  - **"B-MISC" / "I-MISC"**：Miscellaneous (杂项/其他)
 - `image_id`：图像文件名（不含扩展名），对应 `data/ner_img/{image_id}.jpg`
-
-**注意**：`OTHER` 类型会在代码中自动映射为 `MISC`。
 
 ---
 
@@ -182,23 +185,6 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 [Overall] Acc=0.5352, P=0.0219, R=0.0314, F1=0.0258
 ```
 
----
-
-## 🔍 可视化注意力权重
-
-查看模型如何关注图像中的不同区域：
-
-```bash
-python visualize.py \
-    --save_name "2025-12-03_train_MNER_exp1_fgm_amp" \
-    --text "A long line of priests winds into Holy Name Cathedral for Archbishop Blase Cupich ' s installation http://t.co/PbufTISXVW" \
-    --img "data/ner_img/72439.jpg"
-```
-
-生成热力图：`attention_heatmap.png`
-
----
-
 ## 📦 导出 ONNX 模型
 
 用于加速推理部署：
@@ -211,11 +197,9 @@ python export_onnx.py --save_name 保存的文件名
 
 推理：
 
-```
+```python
 python inference_onnx.py
 ```
-
-
 
 ---
 
@@ -295,7 +279,6 @@ NER/
 ├── dataloader.py          # 数据加载器
 ├── metrics.py             # 评估指标
 ├── visualize.py           # 注意力可视化
-├── export_onnx.py         # ONNX 导出
 ├── requirements.txt       # 依赖列表
 ├── data/                  # 数据目录
 │   ├── train.json
@@ -303,6 +286,9 @@ NER/
 │   ├── test.json
 │   ├── ner_img/          # 图像文件夹
 │   └── no_images.jpg     # 占位图
+├── onnx/  
+│   ├── export_onnx.py    # ONNX 导出
+│   ├── inference_onnx.py # ONNX 推导			
 ├── save_models/          # 模型保存目录（训练后生成）
 └── README.md             # 本文档
 ```
